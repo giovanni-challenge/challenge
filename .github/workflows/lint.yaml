@@ -1,0 +1,49 @@
+name: Lint
+on:
+  push:
+  pull_request:
+
+jobs:
+  tflint:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      name: Checkout source code
+
+    - uses: actions/cache@v2
+      name: Cache plugin dir
+      with:
+        path: ~/.tflint.d/plugins
+        key: ubuntu-latest-tflint-${{ hashFiles('.tflint.hcl') }}
+
+    - uses: terraform-linters/setup-tflint@v1
+      name: Setup TFLint
+      with:
+        tflint_version: v0.29.0
+
+    - name: Show version
+      run: tflint --version
+
+    - name: Init
+      run: tflint --init
+
+    - name: Run TFLint on 00_deploy_vms
+      run: tflint -f compact 00_deploy_vms
+
+    - name: Run TFLint on 20_create_cluster
+      run: tflint -f compact 20_create_cluster
+
+    - name: Run TFLint on 30_create_ns_run_benchmark
+      run: tflint -f compact 30_create_ns_run_benchmark
+
+  ansible-lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Run ansible-lint
+        uses: ansible-community/ansible-lint-action@v6
+        with:
+          path: "10_configure_vms/"
