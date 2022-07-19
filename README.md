@@ -1,6 +1,6 @@
 # Challenge
 
-The VM provisioning is performed through Terraform, it is free and it is a widely known and adopted tools for IaS with several providers. VMs will run on KVM.
+The VM provisioning is performed through Terraform, it is free and it is a widely known and adopted tools for IaC with several providers. VMs will run on KVM.
 
 ## Initial steps
 Move to the "images" folder and download and resize the Ubuntu server image:
